@@ -1,9 +1,11 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Lexend", serif;
 }
 
 :root {
@@ -12,39 +14,35 @@
   --black: #151515;
   --newgreen: #00896a;
 
-  
 }
 
-body{
+body {
   background-color: var(--newwhite);
   color: var(--newblack);
 }
 
-
-
-.div-flex{
+.div-flex {
   display: flex;
   align-items: center;
 }
 
-.hero{
+.hero {
   height: 100vh;
-  width: 100%;
-  background: url(./assets/hero.jpg);
-  background-repeat: no-repeat ;
-  background-size: cover;
+  /* width: 100%; */
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
 
-.claim{
-  /* backdrop-filter: blur(8px); */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 5%;
+.hero-right{
+  height: 75%;
+  background: url(./assets/kid.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 45% 55%; 
+  border-radius: 10px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+  background-color: var(--newwhite);
+  background-blend-mode: multiply;
+  
 }
