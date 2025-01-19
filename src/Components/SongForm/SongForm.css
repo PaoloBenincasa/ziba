@@ -1,0 +1,7 @@
+.song-form{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    gap: 10px;
+    
+}

@@ -12,8 +12,8 @@
   --newwhite: #fafffd;
   --newblack: #252829;
   --black: #151515;
-  --newgreen: #00896a;
-
+  --newgreen: #159678;
+  --darkred: rgb(109, 52, 52);
 }
 
 body {
@@ -35,14 +35,60 @@ body {
 }
 
 .hero-right{
-  height: 75%;
+  height: 70%;
   background: url(./assets/kid.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 45% 55%; 
+  /* background-position: 45% 55%;  */
+
   border-radius: 10px;
   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
   background-color: var(--newwhite);
   background-blend-mode: multiply;
-  
+
+  /* background-color: var(--newgreen); */
+}
+
+/* .hero-right{
+  content: '';
+  background: url(./assets/kid.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 45% 55%; 
+  z-index: -1;
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+} */
+
+.txtGrey{
+  color: grey;
+}
+
+.txtBlack{
+  color: var(--newblack)
+}
+
+.btn-green{
+  background-color: var(--newgreen);
+  color: var(--newwhite);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: solid 2px var(--newgreen);
+  transition: 0.2s ease-in-out;
+}
+
+.btn-green:hover{
+  background-color: var(--newwhite);
+  color: var(--newgreen);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: solid 2px var(--newgreen);
+}
+
+.under-green{
+  text-decoration: underline var(--newgreen);
 }

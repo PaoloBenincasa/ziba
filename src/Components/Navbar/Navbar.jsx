@@ -22,9 +22,16 @@ export default function Navbar() {
                     search
                 </li>
                 <li>
-                    <i class="bi bi-person-square"></i>
-                    profile
+                    <i class="bi bi-file-music-fill"></i>
+                    your songs
                 </li>
+                <Link to={`/signin`} className='link'>
+                <li>
+                    <i class="bi bi-person-square"></i>
+                    log in
+                </li>
+                </Link>
+
             </ul>
         </nav>
     )
