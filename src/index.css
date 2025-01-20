@@ -39,14 +39,8 @@ body {
   background: url(./assets/kid.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  /* background-position: 45% 55%;  */
-
+  background-position: 45% 55%; 
   border-radius: 10px;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
-  background-color: var(--newwhite);
-  background-blend-mode: multiply;
-
-  /* background-color: var(--newgreen); */
 }
 
 /* .hero-right{
