@@ -1,13 +1,14 @@
 import { useState } from "react";
 import './SongForm.css';
+import supabase from '../../supabase/client'; 
+import { ToastContainer, toast } from 'react-toastify';
 
 const SongForm = ({ onSave }) => {
     const [song, setSong] = useState({
         title: '',
         lyrics_with_chords: '',
         mp3_url: '',
-        is_published: false,
-        published_libk: '',
+        published_link: '',
         has_copyright: false,
         is_private: true,
     });
@@ -17,17 +18,30 @@ const SongForm = ({ onSave }) => {
         setSong({ ...song, [name]: value })
     };
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSave(song);
+        const { data, error } = await supabase
+            .from('songs') 
+            .insert([song]);
+    
+        if (error) {
+            toast.error('Error saving song:', error.message);
+        } else {
+            toast.success('Song saved successfully:', data);
+            onSave(song); 
+        }
     };
+    
 
     const handleRadioChange = (e) => {
+        const { name, value } = e.target;
         setSong({
             ...song,
-            has_copyright: e.target.value === 'true',
+            [name]: value === 'true', 
         });
     };
+    
 
 
     return (
@@ -136,6 +150,17 @@ const SongForm = ({ onSave }) => {
                 </div>
             </div>
             <button className="btn-green w-25" type="submit">Save</button>
+            <ToastContainer position="bottom-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={true}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
         </form>
     )
 };
