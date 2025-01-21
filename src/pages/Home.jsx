@@ -1,7 +1,18 @@
 import { Link } from "react-router"
 import SignUp from "./SignUp"
+import { useEffect } from "react"
+import supabase from "../supabase/client";
 
 export default function Home() {
+    useEffect(()=>{
+        async function getSession(params){
+            const {data, error} = await supabase.auth.getSession();
+            console.log(data);
+            
+        }
+        getSession();
+    }, []);
+
     return (
         <div className="vh-100">
             <section className="hero row vw-100 text-end gap-3">

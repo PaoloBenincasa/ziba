@@ -86,3 +86,11 @@ body {
 .under-green{
   text-decoration: underline var(--newgreen);
 }
+
+.song-form{
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  gap: 10px;
+  padding-bottom: 10px;
+}

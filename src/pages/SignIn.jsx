@@ -34,11 +34,11 @@ export default function SignIn() {
                     Please enter your details
                 </h5>
                 <div className="mb-3 w-50">
-                    <label HTMLfor="email" className="form-label">Email address</label>
+                    <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" id="email" aria-describedby="emailHelp" name="email" />
                 </div>
                 <div className="mb-3 w-50">
-                    <label HTMLfor="password" className="form-label">Password</label>
+                    <label htmlFor="password" className="form-label">Password</label>
                     <input type="password" className="form-control" id="password" name="password" />
                 </div>
                 <div className="d-flex flex-column align-items-center">

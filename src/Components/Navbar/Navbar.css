@@ -39,3 +39,17 @@ li {
 li:hover{
     color: var(--newblack); 
 }
+
+a{
+    text-decoration: none;
+}
+
+.dropdown-item{
+    color: grey;
+    background-color: var(--newwhite) !important;
+}
+
+.dropdown-item:hover{
+    color: var(--newblack); 
+    background-color: var(--newwhite) !important;
+}

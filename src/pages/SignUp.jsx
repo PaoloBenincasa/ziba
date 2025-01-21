@@ -1,15 +1,54 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router";
+import supabase from "../supabase/client";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+
+
 export default function SignUp() {
+    const navigate = useNavigate();
+    const handleSubmission = async (event) => {
+        event.preventDefault();
+        // catturo i dati del form
+        const formRegister = event.currentTarget;
+        const { email, password, username, first_name, last_name } = Object.fromEntries(new FormData(formRegister));
+        try {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        username,
+                        first_name,
+                        last_name,
+                    },
+                },
+            })
+            if (error) {
+                toast.error('Error registering user')
+
+            } else {
+                toast.success('Check your email for confirmation link')
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+
+                formRegister.reset();
+                navigate('/');
+            }
+        } catch (error) {
+            alert(error)
+        }
+    }
+
     return (
         <div className="vh-100 container d-flex align-items-center justify-content-center">
-            <form className="row w-100  justify-content-center">
-                    <h5 className="txtGrey text-center mb-3 mt-3">
-                        Create your account
-                    </h5>
+            <form onSubmit={handleSubmission} className="row w-100  justify-content-center">
+                <h5 className="txtGrey text-center mb-4 mt-3">
+                    Create your account
+                </h5>
                 <div className="col-md-4">
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
-                        <input type="text" className="form-control" id="username" aria-describedby="emailHelp" name="username" placeholder="use your stage name"/>
+                        <input type="text" className="form-control" id="username" aria-describedby="emailHelp" name="username" placeholder="use your stage name" />
                     </div>
                     <div className="mb-3 ">
                         <label htmlFor="first_name" className="form-label">First Name</label>
@@ -40,6 +79,17 @@ export default function SignUp() {
                     </div>
                 </div>
             </form>
+            <ToastContainer position="bottom-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={true}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     )
 }
