@@ -47,13 +47,13 @@ export default function Navbar() {
                 {session ? (
 
                     <div className="dropdown">
-                        <a className="dropdown-toggle text-decoration-none txtGrey" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {firstName}
+                        <a className="dropdown-toggle under-green txtGrey" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {firstName}
                         </a>
 
                         <ul className="dropdown-menu">
                             <Link to={'/profile'}>
-                                <div className="dropdown-item" href="#">Profile</div>
+                                <div className="dropdown-item" href="#">Update profile</div>
                             </Link>
                             <a onClick={signOut} className="dropdown-item" href="#">Log out</a>
                         </ul>

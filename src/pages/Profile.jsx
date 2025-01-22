@@ -86,6 +86,7 @@ export default function Profile() {
             } else {
                 console.log("Biography updated successfully!");
                 alert("Biography updated successfully!");
+                setTextareaVisible(false);
             }
         } catch (err) {
             console.error("Unexpected error:", err);
@@ -93,6 +94,7 @@ export default function Profile() {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -131,12 +133,15 @@ export default function Profile() {
                         e.target.src = "https://picsum.photos/id/1/200/300";
                     }}
                     alt="Profile"
-                    className="rounded-circle w-25 "
+                    className="rounded-circle proPic "
                 />
-                <h1>{username}</h1>
+                <h1 className="mt-3">{username}</h1>
                 <p className="under-green" id="bio-button" onClick={() => setTextareaVisible((prev) => !prev)}>insert your bio</p>
-                {isTextareaVisible && (
-                    <div id="textarea-container" className="textarea-container">
+                {isTextareaVisible ? (
+                    <div
+                        id="textarea-container"
+                        className={`textarea-container ${isTextareaVisible ? "animate__animated animate__fadeInUp" : ""}`}
+                    >
                         <div className="d-flex flex-column align-items-center">
                             <textarea
                                 rows="5"
@@ -155,27 +160,12 @@ export default function Profile() {
                             </button>
                         </div>
                     </div>
-
+                ) : (
+                    <p className="w-75 text-center">{bio}</p>
                 )}
 
             </section>
-            {/* <div className="profile-container">
-                <h2>Update Your Biography</h2>
-                <textarea
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    placeholder="Write about yourself..."
-                    className="form-control"
-                    rows={5}
-                />
-                <button
-                    onClick={handleSave}
-                    className="btn btn-primary mt-3"
-                    disabled={loading}
-                >
-                    {loading ? "Saving..." : "Save"}
-                </button>
-            </div> */}
+
         </div>
     );
 }
