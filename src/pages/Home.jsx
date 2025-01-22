@@ -15,7 +15,7 @@ export default function Home() {
 
     return (
         <div className="vh-100">
-            <section className="hero row w-100 text-end gap-3 pt-5">
+            <section className="hero row w-100 text-end gap-5 pt-5">
                 <div className="col-5">
                     <h2>
                         <span>
@@ -44,7 +44,7 @@ export default function Home() {
                         </small>
                     </div>
                 </div>
-                <div className="col-5 hero-right">
+                <div className="col-3 hero-right">
 
                 </div>
             </section>

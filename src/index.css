@@ -87,3 +87,6 @@ body {
   text-decoration: underline var(--newgreen);
 }
 
+#bio-button{
+  cursor: pointer;
+}

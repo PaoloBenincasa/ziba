@@ -14,6 +14,7 @@ export default function Profile() {
     const [loading, setLoading] = useState(false);
     const [bio, setBio] = useState("");
     const [avatar_url, setAvatarUrl] = useState(null);
+    const [isTextareaVisible, setTextareaVisible] = useState(false);
 
 
 
@@ -39,26 +40,26 @@ export default function Profile() {
     useEffect(() => {
         const fetchBio = async () => {
             const user = supabase.auth.user();
-    
+
             if (user) {
                 const { data, error } = await supabase
                     .from("profiles")
                     .select("bio")
                     .eq("id", user.id)
                     .single();
-    
+
                 if (error) {
                     console.error("Error fetching bio:", error.message);
                 } else {
-                    console.log("Fetched bio:", data.bio); 
+                    console.log("Fetched bio:", data.bio);
                     setBio(data.bio || "");
                 }
             }
         };
-    
+
         fetchBio();
     }, []);
-    
+
 
     const handleSave = async () => {
         setLoading(true);
@@ -123,7 +124,7 @@ export default function Profile() {
 
     return (
         <div className="d-flex vh-100 mt-5 pt-5 p-2 d-flex justify-content-center">
-            <section className="d-flex flex-column align-items-center ">
+            <section className="d-flex flex-column align-items-center mt-5 p-2 ">
                 <img
                     src={getAvatarUrl(avatar_url) || "https://picsum.photos/id/1/200/300"}
                     onError={(e) => {
@@ -133,9 +134,30 @@ export default function Profile() {
                     className="rounded-circle w-25 "
                 />
                 <h1>{username}</h1>
-                <div className="bio-container ">
-                    <p className="under-green">inserisci la tua bio</p>
-                </div>
+                <p className="under-green" id="bio-button" onClick={() => setTextareaVisible((prev) => !prev)}>insert your bio</p>
+                {isTextareaVisible && (
+                    <div id="textarea-container" className="textarea-container">
+                        <div className="d-flex flex-column align-items-center">
+                            <textarea
+                                rows="5"
+                                cols="60"
+                                placeholder="tell us about yourself..."
+                                className="p-1 form-control"
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                            ></textarea>
+                            <button
+                                onClick={handleSave}
+                                className="btn-green mt-3 w-25"
+                                disabled={loading}
+                            >
+                                {loading ? "Saving..." : "Save"}
+                            </button>
+                        </div>
+                    </div>
+
+                )}
+
             </section>
             {/* <div className="profile-container">
                 <h2>Update Your Biography</h2>

@@ -53,3 +53,7 @@ a{
     color: var(--newblack); 
     background-color: var(--newwhite) !important;
 }
+
+.nav-center{
+    transform: translateX(2%);
+}

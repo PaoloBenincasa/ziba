@@ -19,12 +19,15 @@ export default function Navbar() {
 
     return (
         <nav className='d-flex align-items-center justify-content-between p-3'>
-            <Link to={`/`} className='link'>
-                <div className='under-green fst-italic'>
-                    Songggs
-                </div>
-            </Link>
-            <ul className='d-flex align-items-center justify-content-around w-50 '>
+            <div className='w-25'>
+
+                <Link to={`/`} className='link'>
+                    <div className='under-green fst-italic'>
+                        Songggs
+                    </div>
+                </Link>
+            </div>
+            <ul className='d-flex align-items-center justify-content-around w-50 nav-center'>
                 <Link to={`/write`} className='link'>
                     <li>
                         <i className="bi bi-pen-fill"></i>
@@ -40,7 +43,7 @@ export default function Navbar() {
                     catalog
                 </li>
             </ul>
-            <div>
+            <div className='w-25 text-end'>
                 {session ? (
 
                     <div className="dropdown">
