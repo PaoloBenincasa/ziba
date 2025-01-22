@@ -4,7 +4,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   font-family: "Lexend", serif;
 }
 
@@ -87,10 +87,3 @@ body {
   text-decoration: underline var(--newgreen);
 }
 
-.song-form{
-  display: flex;
-  flex-direction: column;
-  width: 75%;
-  gap: 10px;
-  padding-bottom: 10px;
-}

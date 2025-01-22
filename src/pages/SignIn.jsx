@@ -46,7 +46,7 @@ export default function SignIn() {
                     <small
                         className="txtGrey">don't have an account yet?
                         <Link to={`/signup`}>
-                            <span className="txtBlack ms-1">join us!</span>
+                            <span className="txtBlack ms-1 under-green">join us!</span>
                         </Link>
                     </small>
                 </div>

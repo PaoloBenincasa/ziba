@@ -73,7 +73,7 @@ export default function SignUp() {
                         <small
                             className="txtGrey ms-1">already have an account?
                             <Link to={`/SignIn`}>
-                                <span className="txtBlack ms-1">sign in!</span>
+                                <span className="txtBlack ms-1 under-green">sign in!</span>
                             </Link>
                         </small>
                     </div>

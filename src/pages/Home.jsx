@@ -4,18 +4,18 @@ import { useEffect } from "react"
 import supabase from "../supabase/client";
 
 export default function Home() {
-    useEffect(()=>{
-        async function getSession(params){
-            const {data, error} = await supabase.auth.getSession();
+    useEffect(() => {
+        async function getSession(params) {
+            const { data, error } = await supabase.auth.getSession();
             console.log(data);
-            
+
         }
         getSession();
     }, []);
 
     return (
         <div className="vh-100">
-            <section className="hero row vw-100 text-end gap-3">
+            <section className="hero row w-100 text-end gap-3 pt-5">
                 <div className="col-5">
                     <h2>
                         <span>
@@ -46,6 +46,22 @@ export default function Home() {
                 </div>
                 <div className="col-5 hero-right">
 
+                </div>
+            </section>
+            <section className="vh-100 w-75 mx-auto">
+                <div className="text-center mb-5 ">
+                    our features
+                </div>
+                <div className="d-flex align-items-center justify-content-around">
+                    <div>
+                        our features
+                    </div>
+                    <div>
+                        our features
+                    </div>
+                    <div>
+                        our features
+                    </div>
                 </div>
             </section>
         </div>

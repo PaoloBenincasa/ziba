@@ -1,6 +1,6 @@
 import { useState } from "react";
 import './SongForm.css';
-import supabase from '../../supabase/client'; 
+import supabase from '../../supabase/client';
 import { ToastContainer, toast } from 'react-toastify';
 
 const SongForm = ({ onSave }) => {
@@ -22,32 +22,32 @@ const SongForm = ({ onSave }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { data, error } = await supabase
-            .from('songs') 
+            .from('songs')
             .insert([song]);
-    
+
         if (error) {
             toast.error('Error saving song:', error.message);
         } else {
             toast.success('Song saved successfully:', data);
-            onSave(song); 
+            onSave(song);
         }
     };
-    
+
 
     const handleRadioChange = (e) => {
         const { name, value } = e.target;
         setSong({
             ...song,
-            [name]: value === 'true', 
+            [name]: value === 'true',
         });
     };
-    
+
 
 
     return (
         <form onSubmit={handleSubmit} className="song-form">
             <div className="d-flex flex-column">
-                <label htmlFor="title">Title</label>
+                <label htmlFor="title" className="under-green">Title</label>
                 <input
                     type="text"
                     id="title"
@@ -58,7 +58,14 @@ const SongForm = ({ onSave }) => {
                     value={song.title} />
             </div>
             <div className="d-flex flex-column">
-                <label htmlFor="lyrics_with_chords">Lyrics</label>
+                <div className="d-flex">
+
+                    <label htmlFor="lyrics_with_chords" className="under-green">
+                        Lyrics
+                    </label>
+                    <p className="txtGrey ms-1 mb-0"> To add a chord, right-click on a word and click "Insert Chord".</p>
+                </div>
+
                 <textarea
                     name="lyrics_with_chords"
                     onChange={handleChange}
@@ -70,7 +77,7 @@ const SongForm = ({ onSave }) => {
                 </textarea>
             </div>
             <div className="d-flex flex-column">
-                <label htmlFor="mp3_url">Mp3 file</label>
+                <label htmlFor="mp3_url" className="under-green">Mp3 file</label>
                 <input
                     type="file"
                     id="mp3_url"
@@ -80,7 +87,7 @@ const SongForm = ({ onSave }) => {
                 />
             </div>
             <div className="d-flex flex-column">
-                <label htmlFor="published_link">Link</label>
+                <label htmlFor="published_link" className="under-green">Link</label>
                 <input
                     id="published_link"
                     name="published_link"
@@ -151,16 +158,16 @@ const SongForm = ({ onSave }) => {
             </div>
             <button className="btn-green w-25" type="submit">Save</button>
             <ToastContainer position="bottom-right"
-                    autoClose={2000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick={true}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={true}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </form>
     )
 };

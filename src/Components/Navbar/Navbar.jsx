@@ -45,16 +45,13 @@ export default function Navbar() {
 
                     <div className="dropdown">
                         <a className="dropdown-toggle text-decoration-none txtGrey" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {firstName} 
+                            {firstName}
                         </a>
 
                         <ul className="dropdown-menu">
-                            {/* <Link to={'/signin'}>
-                            <div className="dropdown-item" href="#">Sign in</div>
-                        </Link>
-                        <Link to={'/signup'}>
-                            <div className="dropdown-item" href="#">Sign up</div>
-                        </Link> */}
+                            <Link to={'/profile'}>
+                                <div className="dropdown-item" href="#">Profile</div>
+                            </Link>
                             <a onClick={signOut} className="dropdown-item" href="#">Log out</a>
                         </ul>
                     </div>

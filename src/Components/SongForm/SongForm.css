@@ -1,8 +1,9 @@
 .song-form{
     display: flex;
     flex-direction: column;
+    /* align-items: center; */
     width: 75%;
     gap: 10px;
     padding-bottom: 10px;
-    /* height: 90%; */
+    height: 100%;
   }

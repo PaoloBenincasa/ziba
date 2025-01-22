@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Write from "../pages/Write";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
+import Profile from "../pages/Profile";
 import { useContext } from "react";
 import SessionContext from "../context/SessionContext";
 
@@ -26,6 +27,8 @@ const router = createBrowserRouter(
 
             <Route element={<ProtectedRoutes/>}>            
                 <Route path="/write" element={<Write/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+                
             </Route>
         </Route>
     )
