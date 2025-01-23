@@ -2,6 +2,7 @@ import { Link } from "react-router"
 import SignUp from "./SignUp"
 import { useEffect } from "react"
 import supabase from "../supabase/client";
+import ArtistCard from "../Components/ArtistCard/ArtistCard";
 
 export default function Home() {
     useEffect(() => {
@@ -50,11 +51,11 @@ export default function Home() {
             </section>
             <section className="vh-100 w-75 mx-auto">
                 <div className="text-center mb-5 ">
-                    our features
+                    our artists
                 </div>
                 <div className="d-flex align-items-center justify-content-around">
                     <div>
-                        our features
+                        <ArtistCard />
                     </div>
                     <div>
                         our features

@@ -14,7 +14,7 @@ function App() {
 function Root() {
   return (
     <SessionContextProvider>
-      <App />
+        <App />
     </SessionContextProvider>
   )
 }

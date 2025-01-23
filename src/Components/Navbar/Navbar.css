@@ -5,6 +5,7 @@ nav {
     align-items: center;
     justify-content: center;
     background-color: rgba(250, 255, 253, 0.8);
+    /* background-color: transparent; */
     position: fixed; 
     top: 0;
     left: 0;
@@ -42,6 +43,11 @@ li:hover{
 
 a{
     text-decoration: none;
+    transition: 0.3s;
+}
+
+a:hover{
+    color: var(--newblack);
 }
 
 .dropdown-item{
