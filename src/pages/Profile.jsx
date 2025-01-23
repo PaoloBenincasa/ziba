@@ -4,8 +4,6 @@ import supabase from "../supabase/client";
 import { getSession } from "../hooks/useSession";
 import { getAvatarUrl } from "../utils/getAvatarUrl";
 
-
-
 export default function Profile() {
     const [profile, setProfile] = useState(null);
     const [session, setSession] = useState(null);
@@ -15,8 +13,7 @@ export default function Profile() {
     const [bio, setBio] = useState("");
     const [avatar_url, setAvatarUrl] = useState(null);
     const [isTextareaVisible, setTextareaVisible] = useState(false);
-
-
+    const [isBioEditVisible, setBioEditVisible] = useState(false); 
 
     useEffect(() => {
         getSession().then((session) => setSession(session));
@@ -25,9 +22,9 @@ export default function Profile() {
     useEffect(() => {
         const fetchProfile = async () => {
             const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', session.user.id)
+                .from("profiles")
+                .select("*")
+                .eq("id", session.user.id)
                 .single();
 
             if (error) setError(error);
@@ -39,27 +36,37 @@ export default function Profile() {
 
     useEffect(() => {
         const fetchBio = async () => {
-            const user = supabase.auth.user();
-
-            if (user) {
+            try {
+                const {
+                    data: { user },
+                    error: authError,
+                } = await supabase.auth.getUser();
+    
+                if (authError || !user) {
+                    console.error("Error fetching authenticated user:", authError);
+                    return;
+                }
+    
                 const { data, error } = await supabase
                     .from("profiles")
                     .select("bio")
                     .eq("id", user.id)
                     .single();
-
+    
                 if (error) {
                     console.error("Error fetching bio:", error.message);
                 } else {
                     console.log("Fetched bio:", data.bio);
                     setBio(data.bio || "");
                 }
+            } catch (err) {
+                console.error("Unexpected error:", err);
             }
         };
-
+    
         fetchBio();
     }, []);
-
+    
 
     const handleSave = async () => {
         setLoading(true);
@@ -84,9 +91,8 @@ export default function Profile() {
             if (error) {
                 console.error("Error updating bio:", error.message);
             } else {
-                console.log("Biography updated successfully!");
-                alert("Biography updated successfully!");
                 setTextareaVisible(false);
+                setBioEditVisible(true); 
             }
         } catch (err) {
             console.error("Unexpected error:", err);
@@ -95,6 +101,95 @@ export default function Profile() {
         }
     };
 
+    const handleAvatarUpload = async (e) => {
+        const file = e.target.files[0];
+    
+        if (!file) {
+            alert("Please select a file!");
+            return;
+        }
+    
+        setLoading(true);
+    
+        try {
+            const fileName = `${session.user.id}-${Date.now()}`;
+            const { data, error: uploadError } = await supabase.storage
+                .from("avatars")
+                .upload(fileName, file);
+    
+            if (uploadError) {
+                console.error("Error uploading avatar:", uploadError.message);
+                alert("Error uploading avatar!");
+                setLoading(false);
+                return;
+            }
+    
+            const { data: publicUrlData } = supabase.storage
+                .from("avatars")
+                .getPublicUrl(fileName);
+    
+            if (publicUrlData?.publicUrl) {
+                const { error } = await supabase
+                    .from("profiles")
+                    .update({ avatar_url: publicUrlData.publicUrl })
+                    .eq("id", session.user.id);
+    
+                if (error) {
+                    console.error("Error updating profile:", error.message);
+                } else {
+                    setAvatarUrl(publicUrlData.publicUrl);
+                    alert("Avatar uploaded successfully!");
+                }
+            } else {
+                console.error("Public URL not retrieved correctly");
+            }
+        } catch (err) {
+            console.error("Unexpected error:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const updateAvatarUrl = async (newAvatarUrl) => {
+        try {
+            const { error } = await supabase
+                .from("profiles")
+                .update({ avatar_url: newAvatarUrl })
+                .eq("id", session.user.id);
+    
+            if (error) {
+                console.error("Error updating avatar URL:", error.message);
+            } else {
+                console.log("Avatar URL updated successfully");
+                setAvatarUrl(newAvatarUrl);
+            }
+        } catch (err) {
+            console.error("Unexpected error updating avatar URL:", err);
+        }
+    };
+
+    const uploadAvatar = async (file) => {
+        try {
+            const fileName = `${session.user.id}-${file.name}`;
+            const { data, error } = await supabase.storage
+                .from("avatars") 
+                .upload(fileName, file);
+    
+            if (error) {
+                console.error("Error uploading avatar:", error.message);
+            } else {
+                console.log("Avatar uploaded successfully:", data);
+    
+                
+                const newAvatarUrl = `${process.env.REACT_APP_SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
+                updateAvatarUrl(newAvatarUrl);
+            }
+        } catch (err) {
+            console.error("Unexpected error uploading avatar:", err);
+        }
+    };
+    
+    
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -102,28 +197,30 @@ export default function Profile() {
                 console.error("Session or user is not defined");
                 return;
             }
-
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('avatar_url')
-                .eq('id', session.user.id);
-
-            if (error) {
-                console.error(error);
-            } else {
-                console.log("Fetched avatar_url:", data);
-                console.log(getAvatarUrl(avatar_url));
-
-                setAvatarUrl(data[0]?.avatar_url || null);
+    
+            try {
+                const { data, error } = await supabase
+                    .from("profiles")
+                    .select("avatar_url")
+                    .eq("id", session.user.id)
+                    .single();
+    
+                if (error) {
+                    console.error("Error fetching avatar_url:", error.message);
+                } else if (data?.avatar_url) {
+                    console.log("Fetched avatar_url:", data.avatar_url);
+                    setAvatarUrl(data.avatar_url);
+                } else {
+                    console.warn("Avatar URL is empty or undefined");
+                }
+            } catch (err) {
+                console.error("Unexpected error fetching avatar_url:", err);
             }
         };
-
-        if (session) {
-            fetchAvatar();
-        }
+    
+        if (session) fetchAvatar();
     }, [session]);
-
-
+    
     return (
         <div className="d-flex vh-100 mt-5 pt-5 p-2 d-flex justify-content-center">
             <section className="d-flex flex-column align-items-center mt-5 p-2 ">
@@ -135,8 +232,25 @@ export default function Profile() {
                     alt="Profile"
                     className="rounded-circle proPic "
                 />
+                <input
+                    type="file"
+                    accept="image/*"
+                    className="form-control mt-3"
+                    onChange={handleAvatarUpload}
+                    disabled={loading}
+                />
                 <h1 className="mt-3">{username}</h1>
-                <p className="under-green" id="bio-button" onClick={() => setTextareaVisible((prev) => !prev)}>insert your bio</p>
+                {!isBioEditVisible && ( 
+                    <p className="under-green" id="bio-button" onClick={() => setTextareaVisible(true)}>
+                        insert your bio
+                    </p>
+                )}
+                {isBioEditVisible && ( 
+                    <p className="under-green" id="bio-button-edit" onClick={() => setTextareaVisible(true)}>
+                        edit your bio
+                    </p>
+                )}
+
                 {isTextareaVisible ? (
                     <div
                         id="textarea-container"
@@ -163,9 +277,7 @@ export default function Profile() {
                 ) : (
                     <p className="w-75 text-center">{bio}</p>
                 )}
-
             </section>
-
         </div>
     );
 }
