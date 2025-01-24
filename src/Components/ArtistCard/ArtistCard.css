@@ -1,12 +1,23 @@
 .artist-card{
-    width: 400px;
-    height: 600px;
-    background-color: blueviolet;
+    width: 320px;
+    height: 450px;
+    background-color: var(--newwhite);
+    border: 1px solid var(--newgreen);
+    overflow: hidden;
+    color: var(--newblack);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 5px;
+    justify-content: space-between;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.artist-card:hover{
+    background-color: var(--newblack);
+    border: 1px solid var(--newwhite);
+    color: var(--newwhite);
+
 }
 
 .artist-card-avatar{
@@ -18,4 +29,12 @@
 .artist-card-bio{
     text-align: center;
     
+}
+
+.artist-link{
+    color: var(--newblack);
+}
+
+.artist-link:hover{
+    color: var(--newwhite);
 }

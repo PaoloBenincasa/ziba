@@ -314,7 +314,7 @@ export default function Profile() {
                     </button>
                 </div> */}
                 <h1 className="mt-3">{username}</h1>
-                <Link to={`publicprofile`}>
+                <Link to={`/profile/${session.user.id}`}>
                     <p>view your public profile</p>
                 </Link>
                 {!isBioEditVisible && (

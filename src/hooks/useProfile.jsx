@@ -9,7 +9,7 @@ export default function useProfile() {
     const [first_name, setFirst_name] = useState('')
     const [last_name, setLast_name] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
-    const [bio, setBio] = useState('')  // Nuovo stato per la bio
+    const [bio, setBio] = useState('')  
 
     useEffect(() => {
         let ignore = false
@@ -26,7 +26,7 @@ export default function useProfile() {
 
             const { data, error } = await supabase
                 .from('profiles')
-                .select(`username, first_name, last_name, avatar_url, bio`)  // Aggiungi bio alla query
+                .select(`username, first_name, last_name, avatar_url, bio`)  
                 .eq('id', user.id)
                 .single()
 
@@ -38,7 +38,7 @@ export default function useProfile() {
                     setFirst_name(data.first_name)
                     setLast_name(data.last_name)
                     setAvatarUrl(data.avatar_url)
-                    setBio(data.bio)  // Imposta il valore della bio
+                    setBio(data.bio)  
                 }
             }
 
@@ -58,12 +58,12 @@ export default function useProfile() {
         last_name,
         username,
         avatar_url,
-        bio,  // Aggiungi la bio nel return
+        bio,  
         setAvatarUrl,
         setLoading,
         setFirst_name,
         setLast_name,
         setUsername,
-        setBio  // Aggiungi la funzione per settare la bio
+        setBio  
     }
 }

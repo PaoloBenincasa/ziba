@@ -1,10 +1,26 @@
 import { Link } from "react-router"
 import SignUp from "./SignUp"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import supabase from "../supabase/client";
 import ArtistCard from "../Components/ArtistCard/ArtistCard";
 
 export default function Home() {
+    const [artists, setArtists] = useState([]);
+
+    useEffect(() => {
+        async function fetchArtists() {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('username, first_name, last_name, avatar_url, bio, id');
+
+            if (data) {
+                setArtists(data);
+            }
+        }
+
+        fetchArtists();
+    }, []);
+
     useEffect(() => {
         async function getSession(params) {
             const { data, error } = await supabase.auth.getSession();
@@ -54,15 +70,9 @@ export default function Home() {
                     our artists
                 </div>
                 <div className="d-flex align-items-center justify-content-around">
-                    <div>
-                        <ArtistCard />
-                    </div>
-                    <div>
-                        our features
-                    </div>
-                    <div>
-                        our features
-                    </div>
+                    {artists.map((artist) => (
+                        <ArtistCard key={artist.username} artist={artist} />
+                    ))}
                 </div>
             </section>
         </div>
