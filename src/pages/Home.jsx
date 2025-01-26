@@ -55,8 +55,8 @@ export default function Home() {
                     <div>
 
                         <small className="txtGrey">don't have an account yet?
-                            <Link to={'/signup'}>
-                                <span className="txtBlack under-green ms-1">join us!</span>
+                            <Link to={'/signup'} className="home-link">
+                                <span className=" ms-1 ">join us!</span>
                             </Link>
                         </small>
                     </div>
@@ -66,8 +66,10 @@ export default function Home() {
                 </div>
             </section>
             <section className="vh-100 w-75 mx-auto">
-                <div className="text-center mb-5 ">
-                    our artists
+                <div className="text-center mb-5 txtGrey">
+                    <h5>
+                        our artists
+                    </h5>
                 </div>
                 <div className="d-flex align-items-center justify-content-around">
                     {artists.map((artist) => (

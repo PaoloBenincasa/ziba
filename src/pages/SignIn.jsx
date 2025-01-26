@@ -45,8 +45,8 @@ export default function SignIn() {
                     <button type="submit" className="btn-green mb-3 mt-2">Sign in</button>
                     <small
                         className="txtGrey">don't have an account yet?
-                        <Link to={`/signup`}>
-                            <span className="txtBlack ms-1 under-green">join us!</span>
+                        <Link to={`/signup`} className="home-link">
+                            <span className="ms-1">join us!</span>
                         </Link>
                     </small>
                 </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import useProfile from "../hooks/useProfile";
 import supabase from "../supabase/client";
 import { getSession } from "../hooks/useSession";
-import { getAvatarUrl } from "../utils/getAvatarUrl";
 import { Link } from "react-router";
 
 export default function Profile() {
@@ -15,6 +14,8 @@ export default function Profile() {
     const [avatar_url, setAvatarUrl] = useState(null);
     const [isTextareaVisible, setTextareaVisible] = useState(false);
     const [isBioEditVisible, setBioEditVisible] = useState(false);
+    const id  = session?.user?.user_metadata?.id;
+
 
     useEffect(() => {
         getSession().then((session) => setSession(session));
@@ -22,85 +23,23 @@ export default function Profile() {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            if (!session?.user?.id) return;
+
             const { data, error } = await supabase
                 .from("profiles")
                 .select("*")
                 .eq("id", session.user.id)
                 .single();
 
-            if (error) setError(error);
-            else setProfile(data);
-        };
-
-        if (session?.user?.id) fetchProfile();
-    }, [session]);
-
-    useEffect(() => {
-        const fetchBio = async () => {
-            try {
-                const {
-                    data: { user },
-                    error: authError,
-                } = await supabase.auth.getUser();
-
-                if (authError || !user) {
-                    console.error("Error fetching authenticated user:", authError);
-                    return;
-                }
-
-                const { data, error } = await supabase
-                    .from("profiles")
-                    .select("bio")
-                    .eq("id", user.id)
-                    .single();
-
-                if (error) {
-                    console.error("Error fetching bio:", error.message);
-                } else {
-                    console.log("Fetched bio:", data.bio);
-                    setBio(data.bio || "");
-                }
-            } catch (err) {
-                console.error("Unexpected error:", err);
-            }
-        };
-
-        fetchBio();
-    }, []);
-
-
-    const handleSave = async () => {
-        setLoading(true);
-
-        try {
-            const {
-                data: { user },
-                error: authError,
-            } = await supabase.auth.getUser();
-
-            if (authError || !user) {
-                console.error("Error fetching authenticated user:", authError);
-                setLoading(false);
-                return;
-            }
-
-            const { error } = await supabase
-                .from("profiles")
-                .update({ bio })
-                .eq("id", user.id);
-
             if (error) {
-                console.error("Error updating bio:", error.message);
+                setError(error);
             } else {
-                setTextareaVisible(false);
-                setBioEditVisible(true);
+                setProfile(data);
             }
-        } catch (err) {
-            console.error("Unexpected error:", err);
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
+
+        fetchProfile();
+    }, [session]);
 
     const handleAvatarUpload = async (e) => {
         const file = e.target.files[0];
@@ -151,123 +90,54 @@ export default function Profile() {
         }
     };
 
-
     useEffect(() => {
-        const fetchAvatar = async () => {
-            if (!session || !session.user) {
-                console.error("Session or user is not defined");
-                return;
-            }
-
+        const fetchBio = async () => {
             try {
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (authError || !user) {
+                    console.error("Error fetching authenticated user:", authError);
+                    return;
+                }
+
                 const { data, error } = await supabase
                     .from("profiles")
-                    .select("avatar_url")
-                    .eq("id", session.user.id)
+                    .select("bio")
+                    .eq("id", user.id)
                     .single();
 
                 if (error) {
-                    console.error("Error fetching avatar_url:", error.message);
-                } else if (data?.avatar_url) {
-                    console.log("Fetched avatar_url:", data.avatar_url);
-                    setAvatarUrl(data.avatar_url);
+                    console.error("Error fetching bio:", error.message);
                 } else {
-                    console.warn("Avatar URL is empty or undefined");
+                    setBio(data.bio || "");
                 }
             } catch (err) {
-                console.error("Unexpected error fetching avatar_url:", err);
+                console.error("Unexpected error:", err);
             }
         };
 
-        if (session) fetchAvatar();
-    }, [session]);
+        fetchBio();
+    }, []);
 
-    const handleAvatarUpdate = async (e) => {
-        const file = e.target.files[0];
-
-        if (!file) {
-            alert("Please select a file!");
-            return;
-        }
-
+    const handleSave = async () => {
         setLoading(true);
-
         try {
-            const fileName = `${session.user.id}-${Date.now()}`;
-
-            if (avatar_url) {
-                const fileToDelete = avatar_url.split("/").pop();
-                await supabase.storage
-                    .from("avatars")
-                    .remove([fileToDelete]);
-            }
-
-            const { data, error: uploadError } = await supabase.storage
-                .from("avatars")
-                .upload(fileName, file);
-
-            if (uploadError) {
-                console.error("Error uploading avatar:", uploadError.message);
-                alert("Error uploading avatar!");
-                setLoading(false);
-                return;
-            }
-
-            const { data: publicUrlData } = supabase.storage
-                .from("avatars")
-                .getPublicUrl(fileName);
-
-            if (publicUrlData?.publicUrl) {
-                const { error } = await supabase
-                    .from("profiles")
-                    .update({ avatar_url: publicUrlData.publicUrl })
-                    .eq("id", session.user.id);
-
-                if (error) {
-                    console.error("Error updating profile:", error.message);
-                } else {
-                    setAvatarUrl(publicUrlData.publicUrl);
-                    alert("Avatar updated successfully!");
-                }
-            }
-        } catch (err) {
-            console.error("Unexpected error:", err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleAvatarDelete = async () => {
-        if (!avatar_url) {
-            alert("No avatar to delete!");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            const fileToDelete = avatar_url.split("/").pop();
-            const { error: deleteError } = await supabase.storage
-                .from("avatars")
-                .remove([fileToDelete]);
-
-            if (deleteError) {
-                console.error("Error deleting avatar:", deleteError.message);
-                alert("Error deleting avatar!");
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            if (authError || !user) {
+                console.error("Error fetching authenticated user:", authError);
                 setLoading(false);
                 return;
             }
 
             const { error } = await supabase
                 .from("profiles")
-                .update({ avatar_url: null })
-                .eq("id", session.user.id);
+                .update({ bio })
+                .eq("id", user.id);
 
             if (error) {
-                console.error("Error updating profile:", error.message);
+                console.error("Error updating bio:", error.message);
             } else {
-                setAvatarUrl(null);
-                alert("Avatar deleted successfully!");
+                setTextareaVisible(false);
+                setBioEditVisible(true);
             }
         } catch (err) {
             console.error("Unexpected error:", err);
@@ -276,19 +146,65 @@ export default function Profile() {
         }
     };
 
+    if (!session || !profile) {
+        return <div>Loading...</div>;
+    }
 
+     
+    
+    async function deleteProfile(id) {
+        // Get the current session using supabase.auth.getSession()
+        const { data: { session }, error } = await supabase.auth.getSession();
+    
+        if (error || !session) {
+            console.error('Session not found or error fetching session:', error);
+            return;
+        }
+    
+        const supabaseJwt = session.access_token;  // Retrieve the JWT token from the session
+    
+        if (!supabaseJwt) {
+            console.error('JWT token is missing');
+            return;
+        }
+    
+        const response = await fetch(
+            `https://fseeshmepnlxljczdjem.supabase.co/rest/v1/profiles?id=eq.${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${supabaseJwt}`, // Use the retrieved JWT token
+                    apikey: import.meta.env.VITE_SUPABASE_KEY,                   // Make sure SUPABASE_KEY is correctly defined
+                },
+            }
+        );
+    
+        if (!response.ok) {
+            console.error('Error during deletion:', await response.json());
+            return;
+        }
+    
+        const data = await response.json();
+        console.log('Row deleted successfully:', data);
+    }
+    
+    
+        
+    
+    
+    
 
     return (
         <div className="d-flex vh-100 mt-5 pt-5 p-2 d-flex justify-content-center">
-            <section className="d-flex flex-column align-items-center mt-5 p-2 ">
+            <section className="d-flex flex-column align-items-center mt-5 p-2">
                 <img
-                    // src={getAvatarUrl(avatar_url) || "https://picsum.photos/id/1/200/300"}
-                    src={profile?.avatar_url || "https://picsum.photos/id/1/200/300"}
+                    src={profile.avatar_url || "https://picsum.photos/id/1/200/300"}
                     onError={(e) => {
                         e.target.src = "https://picsum.photos/id/1/200/300";
                     }}
                     alt="Profile"
-                    className="rounded-circle proPic "
+                    className="rounded-circle proPic"
                 />
                 <input
                     type="file"
@@ -297,64 +213,51 @@ export default function Profile() {
                     onChange={handleAvatarUpload}
                     disabled={loading}
                 />
-                {/* <div className="d-flex gap-3 mt-3">
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => document.getElementById("avatarInput").click()} // Attiva l'input nascosto
-                        disabled={loading}
-                    >
-                        {loading ? "Uploading..." : "Upload/Update Avatar"}
-                    </button>
-                    <button
-                        className="btn btn-danger"
-                        onClick={handleAvatarDelete}
-                        disabled={loading || !avatar_url}
-                    >
-                        {loading ? "Deleting..." : "Delete Avatar"}
-                    </button>
-                </div> */}
                 <h1 className="mt-3">{username}</h1>
-                <Link to={`/profile/${session.user.id}`}>
+                <Link to={`/publicprofile/${profile.id}`} className="home-link">
                     <p>view your public profile</p>
                 </Link>
+
                 {!isBioEditVisible && (
-                    <p className="under-green" id="bio-button" onClick={() => setTextareaVisible(true)}>
+                    <p className="under-green point" onClick={() => setTextareaVisible(true)}>
                         insert your bio
                     </p>
                 )}
                 {isBioEditVisible && (
-                    <p className="under-green" id="bio-button-edit" onClick={() => setTextareaVisible(true)}>
+                    <p className="under-green point" onClick={() => setTextareaVisible(true)}>
                         edit your bio
                     </p>
                 )}
 
                 {isTextareaVisible ? (
-                    <div
-                        id="textarea-container"
-                        className={`textarea-container ${isTextareaVisible ? "animate__animated animate__fadeInUp" : ""}`}
-                    >
-                        <div className="d-flex flex-column align-items-center">
-                            <textarea
-                                rows="5"
-                                cols="60"
-                                placeholder="tell us about yourself..."
-                                className="p-1 form-control"
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                            ></textarea>
-                            <button
-                                onClick={handleSave}
-                                className="btn-green mt-3 w-25"
-                                disabled={loading}
-                            >
-                                {loading ? "Saving..." : "Save"}
-                            </button>
-                        </div>
+                    <div className="textarea-container animate__fadeInUp">
+                        <textarea
+                            rows="5"
+                            placeholder="tell us about yourself..."
+                            className="p-1 form-control"
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                        />
+                        <button
+                            onClick={handleSave}
+                            className="btn-green mt-3"
+                            disabled={loading}
+                        >
+                            {loading ? "Saving..." : "Save"}
+                        </button>
                     </div>
                 ) : (
                     <p className="w-75 text-center">{bio}</p>
                 )}
+                <button
+                    className="btn btn-danger mt-3"
+                    onClick={() => deleteProfile(session?.user?.id)}
+                    disabled={loading}>
+                    {loading ? "Deleting..." : "Delete Account"}
+                </button>
+
             </section>
         </div>
     );
 }
+

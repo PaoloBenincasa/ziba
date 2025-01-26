@@ -25,12 +25,12 @@ const router = createBrowserRouter(
             <Route path="/" element={<Home />}/>
             <Route path="/signin" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
-            <Route path="/profile/:id" element={<PublicProfile />} />
+            <Route path="/publicprofile/:id" element={<PublicProfile />} />
 
 
             <Route element={<ProtectedRoutes/>}>            
                 <Route path="/write" element={<Write/>}/>
-                <Route path="/profile" element={<Profile/>}/>
+                <Route path="/profile/:id" element={<Profile/>}/>
                 
             </Route>
         </Route>

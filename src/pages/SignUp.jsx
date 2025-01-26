@@ -72,8 +72,8 @@ export default function SignUp() {
                         <button type="submit" className="btn-green">Sign up</button>
                         <small
                             className="txtGrey ms-1">already have an account?
-                            <Link to={`/SignIn`}>
-                                <span className="txtBlack ms-1 under-green">sign in!</span>
+                            <Link to={`/SignIn`} className="home-link">
+                                <span className="ms-1">sign in!</span>
                             </Link>
                         </small>
                     </div>

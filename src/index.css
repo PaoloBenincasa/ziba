@@ -12,14 +12,15 @@
 :root {
   --newwhite: #fafffd;
   --newblack: #252829;
+  --blackest: #0c0e0e;
   --black: #151515;
   --newgreen: #159678;
   --darkred: rgb(109, 52, 52);
 }
 
 body {
-  background-color: var(--newwhite);
-  color: var(--newblack);
+  background-color: var(--newblack);
+  color: var(--newwhite);
 }
 
 .div-flex {
@@ -64,7 +65,11 @@ body {
 }
 
 .txtBlack{
-  color: var(--newblack)
+  color: var(--newblack);
+}
+
+.twtWhite{
+  color: var(--newwhite);
 }
 
 .btn-green{
@@ -99,4 +104,22 @@ body {
 
 .form-control{
   width: 400px;
+  background-color: var(--newblack);
+  color: var(--newwhite);
+  border: 1px solid var(--newwhite);
+  border-radius: 5px;
+}
+
+.home-link{
+  color: var(--newgreen);
+  transition:  0.2s ease-in-out;
+}
+
+
+.home-link:hover{
+  color: var(--newwhite);
+}
+
+.point{
+  cursor: pointer;
 }

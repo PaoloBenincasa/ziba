@@ -6,7 +6,8 @@ import SessionContext from '../../context/SessionContext'
 
 export default function Navbar() {
     const session = useContext(SessionContext);
-    const firstName = session?.user?.user_metadata?.first_name
+    const firstName = session?.user?.user_metadata?.first_name;
+    const id  = session?.user?.user_metadata?.id;
     const signOut = async () => {
         const { error } = await supabase.auth.signOut()
         if (error) {
@@ -14,7 +15,6 @@ export default function Navbar() {
         }
     }
 
-    console.log(session);
 
 
     return (
@@ -52,7 +52,7 @@ export default function Navbar() {
                         </a>
 
                         <ul className="dropdown-menu">
-                            <Link to={'/profile'}>
+                            <Link to={`/profile/${id}`}>
                                 <div className="dropdown-item" href="#">Update profile</div>
                             </Link>
                             <a onClick={signOut} className="dropdown-item" href="#">Log out</a>

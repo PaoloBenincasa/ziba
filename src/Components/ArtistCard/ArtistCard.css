@@ -1,40 +1,50 @@
-.artist-card{
+.artist-card {
     width: 320px;
     height: 450px;
-    background-color: var(--newwhite);
-    border: 1px solid var(--newgreen);
+    background-color: var(--newblack);
+    border: 2px solid var(--newwhite);
     overflow: hidden;
-    color: var(--newblack);
+    color: var(--newwhite);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 15px;
     transition: all 0.3s ease-in-out;
 }
 
-.artist-card:hover{
-    background-color: var(--newblack);
-    border: 1px solid var(--newwhite);
+.artist-card:hover {
+    background-color: var(--blackest);
+    border: 2px solid var(--newgreen);
     color: var(--newwhite);
 
 }
 
-.artist-card-avatar{
+.artist-card-avatar {
     width: 200px;
     height: 200px;
     border-radius: 50%;
 }
 
-.artist-card-bio{
+.artist-card-bio {
     text-align: center;
-    
+
 }
 
-.artist-link{
+.artist-link {
     color: var(--newblack);
 }
 
-.artist-link:hover{
+.artist-link:hover {
     color: var(--newwhite);
+}
+
+.artist-card-username{
+    transition: all 0.3s ease-in-out;
+
+}
+
+.artist-card:hover .artist-card-username {
+    text-decoration: underline;
+    text-decoration-color: var(--newgreen);
 }

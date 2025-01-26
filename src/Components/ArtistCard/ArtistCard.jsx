@@ -37,10 +37,10 @@ export default function ArtistCard({ artist }) {
     const { username, first_name, last_name, avatar_url, id } = artist;
 
     return (
-        <Link to={`/profile/${id}`} className="artist-link">
+        <Link to={`/publicprofile/${id}`} className="artist-link">
             <div className="artist-card rounded">
                 <img src={avatar_url} alt={`${first_name} ${last_name}`} className="artist-card-avatar" />
-                <h4>{username}</h4>
+                <h4 className='artist-card-username'>{username}</h4>
                 <button className="btn-green">Genres</button>
             </div>
         </Link>

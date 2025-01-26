@@ -87,6 +87,16 @@ const SongForm = ({ onSave }) => {
                 />
             </div>
             <div className="d-flex flex-column">
+                <label htmlFor="cover_url" className="under-green">Cover</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    id="cover_url"
+                    name="cover_url"
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="d-flex flex-column">
                 <label htmlFor="published_link" className="under-green">Link</label>
                 <input
                     id="published_link"

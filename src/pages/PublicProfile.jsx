@@ -94,7 +94,7 @@ export default function PublicProfile() {
                     alt="Profile"
                     className="rounded-circle proPic"
                 />
-                <h1 className="mt-3">{profile?.username || 'Unknown'}</h1>
+                <h1 className="mt-3 under-green">{profile?.username || 'Unknown'}</h1>
                 <p className="w-75 text-center">{profile?.bio || 'No bio available.'}</p>
             </section>
         </div>
